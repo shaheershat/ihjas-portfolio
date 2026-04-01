@@ -5,8 +5,26 @@ const ADMIN_CREDENTIALS = {
 };
 
 let portfolioData = {
-    videos: [],
+    videos: [
+        {
+            id: 1,
+            name: "AI-Generated Visual Narrative: Delhi's Air Pollution Crisis",
+            description: "An AI-generated visual narrative portraying Delhi's hazardous air pollution and its effects on residents. The video captures respiratory health risks, indoor exposure, and growing urgency for intervention.",
+            youtube_link: "https://youtu.be/lhUOFhHeydc",
+            category: "ai generated",
+            date: "2026-01-04"
+        },
+        {
+            id: 2,
+            name: "AI-Generated Video: Kerala Union Budget Frustration",
+            description: "This AI-generated video highlights public frustration in Kerala following the 2026 Union Budget, focusing on concerns over neglected infrastructure, unmet promises, and demands for fair development.",
+            youtube_link: "https://youtu.be/yMfgASOSNAc",
+            category: "ai generated",
+            date: "2026-02-04"
+        }
+    ],
     categories: [
+        { id: "ai generated", name: "AI Generated", description: "AI-generated video content", count: 0 },
         { id: "commercial", name: "Commercial", description: "Professional commercial video projects", count: 0 },
         { id: "social", name: "Social Media", description: "Engaging social media content", count: 0 },
         { id: "music", name: "Music Videos", description: "Creative music video productions", count: 0 },
