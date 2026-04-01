@@ -1,7 +1,7 @@
 // Portfolio Admin - Authentication and Video Management
 const ADMIN_CREDENTIALS = {
-    username: 'admin',
-    password: 'ihjas123' // Change this to your preferred password
+    username: 'ihjas',
+    password: 'ahammad123' // Change this to your preferred password
 };
 
 let portfolioData = {
