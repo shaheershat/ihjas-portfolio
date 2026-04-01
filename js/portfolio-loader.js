@@ -374,6 +374,42 @@ window.openVideoModal = function(youtubeUrl) {
 
     modal.classList.remove('opacity-0', 'pointer-events-none');
     modal.classList.add('opacity-100');
+    
+    // Add event listener to stop video when modal is closed
+    modal.addEventListener('click', function(e) {
+        // Only close if clicking outside the iframe or on close button
+        if (e.target === modal || e.target.classList.contains('close-modal')) {
+            closeVideoModal();
+        }
+    });
+    
+    // Add keyboard listener to close on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeVideoModal();
+        }
+    });
+};
+
+// Function to close video modal and stop playback
+window.closeVideoModal = function() {
+    const modal = document.getElementById('video-modal');
+    if (!modal) return;
+    
+    // Find the iframe and remove it to stop video
+    const iframe = modal.querySelector('iframe');
+    if (iframe) {
+        // Set src to empty to stop video
+        iframe.src = '';
+        // Remove the iframe completely
+        iframe.remove();
+    }
+    
+    // Hide modal
+    modal.classList.add('opacity-0', 'pointer-events-none');
+    modal.classList.remove('opacity-100');
+    
+    console.log('Video modal closed and playback stopped');
 };
 
 // Close modal functionality
