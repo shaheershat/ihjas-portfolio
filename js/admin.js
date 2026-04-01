@@ -1,7 +1,7 @@
 // Portfolio Admin - Simple JSON File Management
 const ADMIN_CREDENTIALS = {
-    username: 'admin',
-    password: 'admin'
+    username: 'ihjas',
+    password: 'ahammad123'
 };
 
 let portfolioData = {
