@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="header-include"></div>
+    <main>
+        <section id="contact" class="page-section active pt-32">
+            <div class="max-w-4xl mx-auto px-6 md:px-12 py-20">
+                <h2 class="text-5xl md:text-8xl font-extrabold mb-8 leading-none">Let's <span class="highlight-blue">Work.</span></h2>
+                <p class="text-xl text-zinc-400 mb-16">Have a project in mind? Fill out the form below and I'll get back to you within 48 hours.</p>
+                <form id="contact-form" class="space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-widest text-zinc-500 mb-3">Full Name</label>
+                            <input name="from_name" type="text" placeholder="Your name" required class="w-full bg-transparent border-b-2 border-zinc-800 focus:border-cyan-500 py-4 outline-none transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-widest text-zinc-500 mb-3">Email Address</label>
+                            <input name="from_email" type="email" placeholder="Your e-mail" required class="w-full bg-transparent border-b-2 border-zinc-800 focus:border-cyan-500 py-4 outline-none transition-colors">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-widest text-zinc-500 mb-3">Project Details</label>
+                        <textarea name="message" placeholder="Tell me about your vision..." rows="4" required class="w-full bg-transparent border-b-2 border-zinc-800 focus:border-cyan-500 py-4 outline-none transition-colors resize-none"></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-widest text-zinc-500 mb-3">Instagram Handle</label>
+                            <input name="instagram" type="text" placeholder="@Your instagram handle" required class="w-full bg-transparent border-b-2 border-zinc-800 focus:border-cyan-500 py-4 outline-none transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-widest text-zinc-500 mb-3">Budget Range</label>
+                            <select name="budget" required class="w-full bg-transparent border-b-2 border-zinc-800 focus:border-cyan-500 py-4 outline-none transition-colors appearance-none">
+                                <option class="bg-black">$1k - $3k</option>
+                                <option class="bg-black">$3k - $5k</option>
+                                <option class="bg-black">$5k - $10k</option>
+                                <option class="bg-black">$10k+</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-motion w-full py-6 bg-white text-black font-extrabold uppercase text-xl rounded-full mt-10">Send Proposal</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <div id="footer-include"></div>
+    <script>fetch('header.html').then(r=>r.text()).then(html=>document.getElementById('header-include').innerHTML=html);fetch('footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-include').innerHTML=html);</script>
+    <script src="js/main.js"></script>
+</body>
+</html>

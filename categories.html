@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Category</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="header-include"></div>
+
+    <main id="content">
+        <section class="page-section active pt-32">
+            <div class="max-w-7xl mx-auto px-6 md:px-12 pb-20">
+                <a href="/" class="text-sm text-zinc-400 mb-6 inline-block">← Back</a>
+                <h2 id="category-title" class="text-5xl md:text-7xl font-extrabold mb-6">Category</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="category-grid">
+                    <!-- Cards injected here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="video-modal" class="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 md:p-20 opacity-0 pointer-events-none transition-opacity duration-300">
+        <button id="close-modal" class="absolute top-10 right-10 text-white hover:text-cyan-400">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <div class="w-full max-w-6xl aspect-video bg-zinc-900 rounded-3xl flex items-center justify-center relative overflow-hidden"></div>
+    </div>
+
+    <div id="footer-include"></div>
+
+    <script>
+        fetch('header.html').then(r=>r.text()).then(html=>document.getElementById('header-include').innerHTML=html);
+        fetch('footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-include').innerHTML=html);
+    </script>
+    <script src="js/main.js"></script>
+    <script type="module">
+        import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm').then(({ createClient }) => {
+            const SUPABASE_URL = 'https://efbijvgxkomfnwfsbyep.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmYmlqdmd4a29tZm53ZnNieWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3NjIyMjcsImV4cCI6MjA4NTMzODIyN30.C62NlvZwMHCxusYEgx5YOkjx3wcnpx0-7kfwjftG0yA';
+            const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+            const params = new URLSearchParams(location.search);
+            const category = params.get('category') || '';
+            const titleEl = document.getElementById('category-title');
+            if (titleEl) titleEl.textContent = category || 'Category';
+
+            const grid = document.getElementById('category-grid');
+            const videoModal = document.getElementById('video-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+
+            function extractYouTubeID(urlOrId) { return window.extractYouTubeID ? window.extractYouTubeID(urlOrId) : (urlOrId||''); }
+
+            function formatDateStr(d) {
+                if (!d) return '';
+                const dt = new Date(d);
+                if (isNaN(dt)) return d;
+                return dt.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+            }
+
+            function createCard(item) {
+                const div = document.createElement('div');
+                div.className = 'portfolio-card group bg-zinc-900 rounded-3xl overflow-hidden aspect-[4/5] relative';
+                div.dataset.cat = item.category || '';
+
+                const cover = document.createElement('div');
+                cover.className = 'absolute inset-0 flex items-center justify-center text-zinc-700 font-bold';
+
+                if (item.cover_url) {
+                    const img = document.createElement('img'); img.src = item.cover_url; img.alt = item.name||''; img.className='w-full h-full object-cover'; img.style.objectFit='cover'; img.style.objectPosition='center'; cover.innerHTML=''; cover.appendChild(img);
+                } else if (item.youtube_link) {
+                    const id = extractYouTubeID(item.youtube_link||item.youtube_id||'');
+                    if (id) {
+                        const img = document.createElement('img'); img.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`; img.alt = item.name||''; img.className='w-full h-full object-cover'; img.style.objectFit='cover'; img.style.objectPosition='center'; cover.innerHTML=''; cover.appendChild(img);
+                    } else cover.textContent = 'NO COVER';
+                } else cover.textContent = 'NO COVER';
+
+                const overlay = document.createElement('div'); overlay.className='absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80';
+                const meta = document.createElement('div'); meta.className='absolute bottom-0 left-0 p-8 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform';
+                meta.innerHTML = `<span class="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-2 block">${item.category||''}</span><h4 class="text-2xl font-bold">${item.name||''}</h4>${item.date?`<div class="text-sm text-zinc-400 mt-2">${formatDateStr(item.date)}</div>`:''}`;
+
+                div.appendChild(cover); div.appendChild(overlay); div.appendChild(meta);
+
+                div.addEventListener('click', async () => {
+                    if (!videoModal) return;
+                    const youtubeId = extractYouTubeID(item.youtube_link||item.youtube_id||'');
+                    if (!youtubeId) return;
+                    const container = videoModal.querySelector('.w-full.max-w-6xl');
+                    if (!container) return;
+                    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent||'');
+                    const hosts = isMobile ? ['https://www.youtube.com','https://www.youtube-nocookie.com'] : ['https://www.youtube-nocookie.com','https://www.youtube.com'];
+                    videoModal.classList.remove('pointer-events-none');
+                    if (window.gsap) window.gsap.to(videoModal,{opacity:1,duration:0.15}); else videoModal.style.opacity=1;
+                    container.innerHTML = '<div class="absolute inset-0 flex items-center justify-center"><div class="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div></div>';
+                    try { await window._createYouTubePlayerWithFallback(container, youtubeId, hosts); } catch(e){console.warn(e)}
+                });
+
+                return div;
+            }
+
+            (async function load() {
+                if (!grid) return;
+                grid.innerHTML = '';
+                const { data, error } = await supabase.from('videos').select('id,name,description,category,youtube_link,date').eq('category', category).order('date',{ascending:false});
+                if (error) { console.error('Supabase fetch error', error); return; }
+                for (const row of data || []) {
+                    // derive a cover_url from YouTube if none stored
+                    row.youtube_id = extractYouTubeID(row.youtube_link||row.youtube_id||'');
+                    if (!row.cover_url && row.youtube_id) row.cover_url = `https://img.youtube.com/vi/${row.youtube_id}/hqdefault.jpg`;
+                    grid.appendChild(createCard(row));
+                }
+            })();
+
+            // close modal handler
+            if (closeModalBtn && videoModal) {
+                closeModalBtn.addEventListener('click', () => {
+                    try { if (window._currentYTPlayer && typeof window._currentYTPlayer.destroy === 'function') window._currentYTPlayer.destroy(); } catch (e){}
+                    window._currentYTPlayer = null;
+                    const container = videoModal.querySelector('.w-full.max-w-6xl'); if (container) container.innerHTML = '';
+                    if (window.gsap) window.gsap.to(videoModal,{opacity:0,duration:0.3,onComplete:()=>videoModal.classList.add('pointer-events-none')}); else { videoModal.style.opacity=0; videoModal.classList.add('pointer-events-none'); }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

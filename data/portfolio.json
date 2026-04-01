@@ -1,0 +1,66 @@
+{
+  "videos": [
+    {
+      "id": 1,
+      "name": "Sample Project 1",
+      "description": "A dynamic video editing project showcasing advanced motion graphics and storytelling techniques.",
+      "category": "commercial",
+      "youtube_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "date": "2024-01-15",
+      "thumbnail": "images/thumbnails/project1.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Social Media Campaign",
+      "description": "Engaging social media content series for brand awareness and audience growth.",
+      "category": "social",
+      "youtube_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "date": "2024-01-10",
+      "thumbnail": "images/thumbnails/project2.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Music Video Edit",
+      "description": "Creative music video editing with synchronized cuts and visual effects.",
+      "category": "music",
+      "youtube_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "date": "2024-01-05",
+      "thumbnail": "images/thumbnails/project3.jpg"
+    },
+    {
+      "id": 4,
+      "name": "Documentary Short",
+      "description": "Compelling documentary short film with narrative storytelling and emotional impact.",
+      "category": "documentary",
+      "youtube_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "date": "2023-12-28",
+      "thumbnail": "images/thumbnails/project4.jpg"
+    }
+  ],
+  "categories": [
+    {
+      "id": "commercial",
+      "name": "Commercial",
+      "description": "Professional commercial video projects",
+      "count": 1
+    },
+    {
+      "id": "social",
+      "name": "Social Media",
+      "description": "Engaging social media content",
+      "count": 1
+    },
+    {
+      "id": "music",
+      "name": "Music Videos",
+      "description": "Creative music video productions",
+      "count": 1
+    },
+    {
+      "id": "documentary",
+      "name": "Documentary",
+      "description": "Documentary and narrative films",
+      "count": 1
+    }
+  ]
+}
