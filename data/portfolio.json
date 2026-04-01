@@ -1,101 +1,149 @@
 {
-  "_comment": "Portfolio data for Ihjas Ahammad - Updated for Vercel deployment",
+  "_comment": "Portfolio data for Ihjas Ahammad - Updated with new AI-generated and personal branding videos",
   "videos": [
     {
       "id": 1,
-      "name": "Brand Commercial - Tech Startup",
-      "description": "High-energy commercial for a tech startup featuring motion graphics and product showcases.",
-      "category": "commercial",
-      "youtube_link": "https://youtu.be/ESc8IMmDiVs",
-      "date": "2024-01-15"
+      "name": "AI Generated - Delhi Air Pollution",
+      "description": "An AI-generated visual narrative portraying Delhi's hazardous air pollution and its effects on residents. The video captures respiratory health risks, indoor exposure, and growing urgency for intervention.",
+      "category": "ai generated",
+      "youtube_link": "https://youtu.be/lhUOFhHeydc",
+      "date": "2026-02-04"
     },
     {
       "id": 2,
-      "name": "Instagram Reels Series",
-      "description": "Series of 15-second Instagram reels for fashion brand engagement campaign.",
-      "category": "social",
-      "youtube_link": "https://youtu.be/ebi4SyeHz-A",
-      "date": "2024-01-10"
+      "name": "AI Generated - Kerala Union Budget",
+      "description": "This AI-generated video highlights public frustration in Kerala following 2026 Union Budget, focusing on concerns over neglected infrastructure, unmet promises, and demands for fair development.",
+      "category": "ai generated",
+      "youtube_link": "https://youtu.be/yMfgASOSNAc",
+      "date": "2026-02-04"
     },
     {
       "id": 3,
-      "name": "Indie Music Video - 'Summer Nights'",
-      "description": "Creative music video with synchronized edits and color grading for indie artist.",
-      "category": "music",
-      "youtube_link": "https://youtu.be/3FuCOPcBmUE",
-      "date": "2024-01-05"
+      "name": "AI Generated - Perfect Moment",
+      "description": "A cinematic B-roll video illustrating the mindset of waiting for 'perfect moment' and importance of taking action despite uncertainty.",
+      "category": "ai generated",
+      "youtube_link": "https://youtu.be/ebi4SyeHz-A",
+      "date": "2026-02-04"
     },
     {
       "id": 4,
-      "name": "Documentary: Local Artists",
-      "description": "Short documentary featuring local artists and their creative processes.",
-      "category": "documentary",
-      "youtube_link": "https://youtube.com/shorts/O9chvB3W0fc",
-      "date": "2023-12-28"
+      "name": "AI Generated - Knowing vs Doing",
+      "description": "A motivational video highlighting the gap between knowing and doing, emphasizing that real progress comes from taking action rather than just collecting knowledge.",
+      "category": "ai generated",
+      "youtube_link": "https://youtu.be/3FuCOPcBmUE",
+      "date": "2026-01-30"
     },
     {
       "id": 5,
-      "name": "Product Launch Video",
-      "description": "Exciting product launch video for new consumer electronics brand.",
-      "category": "commercial",
-      "youtube_link": "https://youtube.com/shorts/9H8eOQfzI3c",
-      "date": "2023-12-20"
+      "name": "Behind the Scenes to Public",
+      "description": "A video documenting the transition from working behind the scenes to building in public, focusing on transparency, consistency, and sharing the creative process.",
+      "category": "personal branding",
+      "youtube_link": "https://youtu.be/ESc8IMmDiVs",
+      "date": "2026-01-30"
     },
     {
       "id": 6,
-      "name": "TikTok Viral Content",
-      "description": "Viral TikTok content series that gained 1M+ views for client.",
-      "category": "social",
-      "youtube_link": "https://youtube.com/shorts/11OF4bRjlYs",
-      "date": "2023-12-15"
+      "name": "Wedding Cinematic",
+      "description": "Cinematic wedding video highlighting key moments and emotions of the special day.",
+      "category": "freelance, social media",
+      "youtube_link": "https://youtube.com/shorts/QvuMMVG8cVk",
+      "date": "2026-02-06"
     },
     {
       "id": 7,
-      "name": "AI-Generated Visual Narrative: Delhi's Air Pollution Crisis",
-      "description": "An AI-generated visual narrative portraying Delhi's hazardous air pollution and its effects on residents. The video captures respiratory health risks, indoor exposure, and growing urgency for intervention.",
-      "youtube_link": "https://youtu.be/lhUOFhHeydc",
-      "category": "ai generated",
-      "date": "2026-01-04"
+      "name": "College Programme Energy",
+      "description": "This video highlights the energy and excitement of a college programme through dynamic event coverage and editing.",
+      "category": "freelance, social media",
+      "youtube_link": "https://youtube.com/shorts/iRwplI1Ums0",
+      "date": "2026-02-04"
     },
     {
       "id": 8,
-      "name": "AI-Generated Video: Kerala Union Budget Frustration",
-      "description": "This AI-generated video highlights public frustration in Kerala following the 2026 Union Budget, focusing on concerns over neglected infrastructure, unmet promises, and demands for fair development.",
-      "youtube_link": "https://youtu.be/yMfgASOSNAc",
-      "category": "ai generated",
+      "name": "College Programme Performances",
+      "description": "College programme video featuring performances, crowd moments, and event highlights.",
+      "category": "freelance, social media",
+      "youtube_link": "https://youtube.com/shorts/0zPWQLPgFkc",
       "date": "2026-02-04"
+    },
+    {
+      "id": 9,
+      "name": "School Programme Promotion",
+      "description": "A promotional video created for a school programme, highlighting key activities and building excitement for the event.",
+      "category": "freelance, social media, promo videos",
+      "youtube_link": "https://youtube.com/shorts/bDdCmkoLrEU",
+      "date": "2026-02-04"
+    },
+    {
+      "id": 10,
+      "name": "Framer vs Webflow",
+      "description": "A video explaining the difference between Framer and Webflow, emphasizing choosing tools based on project needs rather than direct comparison.",
+      "category": "personal branding",
+      "youtube_link": "https://youtube.com/shorts/IbfDzbCvJIY",
+      "date": "2026-01-30"
+    },
+    {
+      "id": 11,
+      "name": "Moving to Bali",
+      "description": "A reflective video documenting the experience of moving to Bali and unexpected isolation that followed despite hopes of becoming more social.",
+      "category": "personal branding",
+      "youtube_link": "https://youtube.com/shorts/QES1P2uZCqU",
+      "date": "2026-01-30"
+    },
+    {
+      "id": 12,
+      "name": "Determination and Growth",
+      "description": "A motivational video highlighting determination, mindset, and journey toward personal growth.",
+      "category": "b roll",
+      "youtube_link": "https://youtube.com/shorts/cm8pVPAvakM",
+      "date": "2026-01-30"
+    },
+    {
+      "id": 13,
+      "name": "Perseverance and Self-Improvement",
+      "description": "Motivational video focused on perseverance and self-improvement.",
+      "category": "b roll",
+      "youtube_link": "https://youtube.com/shorts/11OF4bRjlYs",
+      "date": "2026-01-30"
+    },
+    {
+      "id": 14,
+      "name": "Motivational Mindset",
+      "description": "This video showcases a person's motivation, emphasizing discipline, effort, and staying focused on goals.",
+      "category": "b roll",
+      "youtube_link": "https://youtube.com/shorts/9H8eOQfzI3c",
+      "date": "2026-01-30"
     }
   ],
   "categories": [
     {
       "id": "ai generated",
       "name": "AI Generated",
-      "description": "AI-generated video content",
-      "count": 2
+      "description": "AI-generated visual narratives and creative content",
+      "count": 4
     },
     {
-      "id": "commercial",
-      "name": "Commercial",
-      "description": "Professional commercial video projects",
-      "count": 0
+      "id": "personal branding",
+      "name": "Personal Branding",
+      "description": "Personal branding and professional development content",
+      "count": 3
     },
     {
-      "id": "social",
-      "name": "Social Media",
-      "description": "Engaging social media content",
-      "count": 0
+      "id": "freelance, social media",
+      "name": "Freelance & Social Media",
+      "description": "Freelance projects and social media content creation",
+      "count": 3
     },
     {
-      "id": "music",
-      "name": "Music Videos",
-      "description": "Creative music video productions",
-      "count": 0
+      "id": "b roll",
+      "name": "B-Roll",
+      "description": "Cinematic B-roll footage and stock video content",
+      "count": 3
     },
     {
-      "id": "documentary",
-      "name": "Documentary",
-      "description": "Documentary and narrative films",
-      "count": 0
+      "id": "freelance, social media, promo videos",
+      "name": "Promo Videos",
+      "description": "Promotional videos for events and programmes",
+      "count": 1
     }
   ]
 }

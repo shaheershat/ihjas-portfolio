@@ -5,30 +5,13 @@ const ADMIN_CREDENTIALS = {
 };
 
 let portfolioData = {
-    videos: [
-        {
-            id: 1,
-            name: "AI-Generated Visual Narrative: Delhi's Air Pollution Crisis",
-            description: "An AI-generated visual narrative portraying Delhi's hazardous air pollution and its effects on residents. The video captures respiratory health risks, indoor exposure, and growing urgency for intervention.",
-            youtube_link: "https://youtu.be/lhUOFhHeydc",
-            category: "ai generated",
-            date: "2026-01-04"
-        },
-        {
-            id: 2,
-            name: "AI-Generated Video: Kerala Union Budget Frustration",
-            description: "This AI-generated video highlights public frustration in Kerala following the 2026 Union Budget, focusing on concerns over neglected infrastructure, unmet promises, and demands for fair development.",
-            youtube_link: "https://youtu.be/yMfgASOSNAc",
-            category: "ai generated",
-            date: "2026-02-04"
-        }
-    ],
+    videos: [],
     categories: [
-        { id: "ai generated", name: "AI Generated", description: "AI-generated video content", count: 0 },
-        { id: "commercial", name: "Commercial", description: "Professional commercial video projects", count: 0 },
-        { id: "social", name: "Social Media", description: "Engaging social media content", count: 0 },
-        { id: "music", name: "Music Videos", description: "Creative music video productions", count: 0 },
-        { id: "documentary", name: "Documentary", description: "Documentary and narrative films", count: 0 }
+        { id: "ai generated", name: "AI Generated", description: "AI-generated visual narratives and creative content", count: 0 },
+        { id: "personal branding", name: "Personal Branding", description: "Personal branding and professional development content", count: 0 },
+        { id: "freelance, social media", name: "Freelance & Social Media", description: "Freelance projects and social media content creation", count: 0 },
+        { id: "b roll", name: "B-Roll", description: "Cinematic B-roll footage and stock video content", count: 0 },
+        { id: "freelance, social media, promo videos", name: "Promo Videos", description: "Promotional videos for events and programmes", count: 0 }
     ]
 };
 
