@@ -1,11 +1,8 @@
-// Portfolio Admin - PostgreSQL Database Integration
+// Portfolio Admin - Simple JSON File Management
 const ADMIN_CREDENTIALS = {
     username: 'admin',
-    password: 'admin' // Updated to match PostgreSQL user
+    password: 'admin'
 };
-
-// API Configuration
-const API_BASE_URL = '/.netlify/functions/videos'; // Use relative URL for Netlify functions
 
 let portfolioData = {
     videos: [],
@@ -40,72 +37,40 @@ function showAdminInterface() {
     loadDataFromAPI();
 }
 
-// Load data from PostgreSQL API
-async function loadDataFromAPI() {
+// Load existing data
+async function loadData() {
     try {
-        // Show loading state
-        const videosList = document.getElementById('videos-list');
-        const categoriesList = document.getElementById('categories-list');
-        if (videosList) videosList.innerHTML = '<p class="text-zinc-400">Loading videos from database...</p>';
-        if (categoriesList) categoriesList.innerHTML = '<p class="text-zinc-400">Loading categories from database...</p>';
-        
-        // Fetch data from API
-        const response = await fetch(`${API_BASE_URL}/get`);
+        const response = await fetch('data/portfolio.json');
         const data = await response.json();
-        
-        if (data.success) {
-            portfolioData.videos = data.videos;
-            portfolioData.categories = data.categories;
-            displayVideos();
-            displayCategories();
-        } else {
-            console.error('Error loading data:', data.error);
-            showNotification('Error loading data from database', 'error');
-        }
+        portfolioData = data;
+        updateCategoryCounts();
+        displayVideos();
     } catch (error) {
-        console.error('Network error:', error);
-        showNotification('Network error. Please check your connection.', 'error');
+        console.error('Error loading data:', error);
+        displayVideos();
     }
 }
 
-// Save data to PostgreSQL API
-async function saveData() {
-    try {
-        // Get current videos from API first
-        const getResponse = await fetch(`${API_BASE_URL}/videos`);
-        const getData = await getResponse.json();
-        
-        if (!getData.success) {
-            showNotification('Error loading current data', 'error');
-            return;
-        }
-        
-        // Update each video in the database
-        for (const video of portfolioData.videos) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/videos/${video.id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(video)
-                });
-                
-                const result = await response.json();
-                if (!result.success) {
-                    console.error('Error updating video:', result.error);
-                }
-            } catch (error) {
-                console.error('Error updating video:', error);
-            }
-        }
-        
-        showNotification('All changes saved to PostgreSQL database!', 'success');
-        
-    } catch (error) {
-        console.error('Save error:', error);
-        showNotification('Error saving data to database', 'error');
-    }
+// Save data to localStorage and provide download
+function saveData() {
+    updateCategoryCounts();
+    
+    // Save to localStorage
+    localStorage.setItem('portfolioData', JSON.stringify(portfolioData, null, 2));
+    
+    // Create downloadable file
+    const dataStr = JSON.stringify(portfolioData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'portfolio.json';
+    link.click();
+    
+    URL.revokeObjectURL(url);
+    
+    showNotification('Data saved! Download portfolio.json and replace the file in your data folder to make changes visible on your site.', 'success');
 }
 
 // Add or update video
@@ -231,103 +196,33 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
     }
 });
 
-// Handle form submission
-document.getElementById('add-video-form').addEventListener('submit', function(e) {
-    e.preventDefault();
+// Delete video
+function deleteVideo(id) {
+    if (!confirm('Are you sure you want to delete this video?')) return;
     
-    const videoData = {
-        id: document.getElementById('video-id')?.value || Date.now(),
-        name: document.getElementById('video-name').value,
-        description: document.getElementById('video-description').value,
-        youtube_link: document.getElementById('video-url').value,
-        category: document.getElementById('video-category').value,
-        date: document.getElementById('video-date').value
-    };
-    
-    addOrUpdateVideo(videoData);
-});
-
-// Add new category
-document.getElementById('add-category-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const categoryData = {
-        id: document.getElementById('category-id')?.value || Date.now(),
-        name: document.getElementById('category-name').value,
-        description: document.getElementById('category-description').value
-    };
-    
-    addOrUpdateCategory(categoryData);
-});
-
-// Add or update category
-async function addOrUpdateCategory(categoryData) {
-    try {
-        const url = categoryData.id ? 
-            `${API_BASE_URL}/put-category/${categoryData.id}` : 
-            `${API_BASE_URL}/post-category`;
-            
-        const method = categoryData.id ? 'PUT' : 'POST';
-        
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(categoryData)
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            showNotification(categoryData.id ? 'Category updated successfully!' : 'Category added successfully!', 'success');
-            await loadDataFromAPI(); // Reload data
-        } else {
-            showNotification(`Error: ${result.error}`, 'error');
-        }
-    } catch (error) {
-        console.error('API error:', error);
-        showNotification('Network error. Please try again.', 'error');
-    }
+    portfolioData.videos = portfolioData.videos.filter(v => v.id !== id);
+    saveData();
+    displayVideos();
+    showNotification('Video deleted successfully!', 'success');
 }
 
-// Delete category
-async function deleteCategory(id) {
-    if (!confirm('Are you sure you want to delete this category?')) return;
+// Edit video
+function editVideo(id) {
+    const video = portfolioData.videos.find(v => v.id === id);
+    if (!video) return;
     
-    try {
-        const response = await fetch(`${API_BASE_URL}/delete-category/${id}`, {
-            method: 'DELETE'
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            showNotification('Category deleted successfully!', 'success');
-            await loadDataFromAPI(); // Reload data
-        } else {
-            showNotification(`Error: ${result.error}`, 'error');
-        }
-    } catch (error) {
-        console.error('API error:', error);
-        showNotification('Network error. Please try again.', 'error');
-    }
-}
-
-// Edit category
-function editCategory(id) {
-    const category = portfolioData.categories.find(c => c.id === id);
-    if (!category) return;
-    
-    document.getElementById('category-id').value = category.id;
-    document.getElementById('category-name').value = category.name;
-    document.getElementById('category-description').value = category.description;
+    document.getElementById('video-id').value = video.id;
+    document.getElementById('video-name').value = video.name;
+    document.getElementById('video-description').value = video.description;
+    document.getElementById('video-url').value = video.youtube_link;
+    document.getElementById('video-category').value = video.category;
+    document.getElementById('video-date').value = video.date;
     
     // Change button text
-    document.querySelector('#add-category-form button[type="submit"]').textContent = 'Update Category';
+    document.querySelector('#add-video-form button[type="submit"]').textContent = 'Update Video';
     
     // Scroll to form
-    document.getElementById('add-category-form').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('add-video-form').scrollIntoView({ behavior: 'smooth' });
 }
 
 // Reset form
@@ -335,9 +230,6 @@ function resetForm() {
     document.getElementById('add-video-form').reset();
     document.getElementById('video-id')?.remove();
     document.querySelector('#add-video-form button[type="submit"]').textContent = 'Add Video';
-    document.getElementById('add-category-form').reset();
-    document.getElementById('category-id')?.remove();
-    document.querySelector('#add-category-form button[type="submit"]').textContent = 'Add Category';
 }
 
 // Add hidden ID field to form
