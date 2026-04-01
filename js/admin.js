@@ -77,15 +77,29 @@ async function loadData() {
     }
 }
 
-// Save data to localStorage (for development) or show download instructions
+// Save data to localStorage AND try to save to actual file
 function saveData() {
     updateCategoryCounts();
     
     // For local development, save to localStorage
     localStorage.setItem('portfolioData', JSON.stringify(portfolioData, null, 2));
     
-    // Show success message
-    showNotification('Data saved successfully! For production, download the JSON file.', 'success');
+    // Also try to save to actual portfolio.json file
+    const dataStr = JSON.stringify(portfolioData, null, 2);
+    
+    // Create a downloadable file for the user
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'portfolio.json';
+    link.click();
+    
+    URL.revokeObjectURL(url);
+    
+    // Show success message with instructions
+    showNotification('Data saved! Download portfolio.json and replace the file in your data folder to make changes visible on your site.', 'success');
 }
 
 // Update category counts based on videos
@@ -243,17 +257,31 @@ function importData(event) {
 // Show notification
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-medium z-50 ${
+    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-medium z-50 max-w-md ${
         type === 'success' ? 'bg-green-600' : 
         type === 'error' ? 'bg-red-600' : 'bg-blue-600'
     }`;
-    notification.textContent = message;
+    notification.innerHTML = `
+        <div class="font-semibold mb-2">${type === 'success' ? '✅ Success!' : type === 'error' ? '❌ Error!' : 'ℹ️ Info'}</div>
+        <div>${message}</div>
+        ${type === 'success' ? `
+            <div class="mt-3 pt-3 border-t border-green-500 text-sm">
+                <p class="text-green-200"><strong>Next Steps:</strong></p>
+                <ol class="list-decimal list-inside text-green-200 mt-2">
+                    <li>Download the portfolio.json file</li>
+                    <li>Replace the file in: <code class="bg-green-800 px-1 rounded">data/portfolio.json</code></li>
+                    <li>Push to GitHub to update your live site</li>
+                </ol>
+            </div>
+        ` : ''}
+    `;
     
     document.body.appendChild(notification);
     
+    // Auto-remove after 8 seconds for success messages (longer for instructions)
     setTimeout(() => {
         notification.remove();
-    }, 3000);
+    }, type === 'success' ? 8000 : 3000);
 }
 
 // Add hidden ID field to form
