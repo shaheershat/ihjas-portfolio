@@ -1,15 +1,56 @@
 # Ihjas Ahammad - Video Editor Portfolio
 
-A modern, responsive portfolio website for Ihjas Ahammad, professional video editor and motion designer.
+Professional video portfolio website with admin interface for managing content.
 
-## Features
+## 🌐 **Live Site**
+- **URL**: https://ihjasahammad.vercel.app
+- **Admin**: https://ihjasahammad.vercel.app/admin.html
 
-- **Dark Theme Design**: Modern black and cyan color scheme
-- **Responsive Layout**: Works seamlessly on desktop, tablet, and mobile
-- **Video Portfolio**: Showcases video projects with category filtering
-- **Contact Form**: Integrated contact form for client inquiries
-- **Smooth Animations**: GSAP-powered animations and transitions
-- **Static Hosting**: Optimized for Vercel deployment
+## 🎛️ **Admin Access**
+- **Username**: ihjas
+- **Password**: ahammad123
+
+## 📹 **Features**
+- Responsive design for all devices
+- Video portfolio with filtering by category
+- Automatic YouTube thumbnail generation
+- Password-protected admin interface
+- Add/Edit/Delete videos without code editing
+- Export/Import functionality for backups
+
+## 🚀 **Deployment**
+- **Platform**: Vercel
+- **Repository**: https://github.com/shaheershat/ihjas-portfolio
+- **Branch**: main
+- **Framework**: Static HTML/CSS/JavaScript
+
+## 📁 **Project Structure**
+```
+ihjas-portfolio/
+├── index.html          # Main homepage
+├── portfolio.html       # Portfolio grid page
+├── admin.html          # Admin interface (password protected)
+├── sync-data.html      # Data sync utility
+├── data/
+│   └── portfolio.json  # Video and category data
+├── js/
+│   ├── main.js
+│   ├── portfolio-loader.js
+│   └── admin.js
+├── css/
+│   └── style.css
+└── images/
+    └── thumbnails/      # Video thumbnails
+    └── videos/             # Video files
+    └── header.html         # Header component
+    └── footer.html         # Footer component
+```
+
+## 🎯 **Usage**
+1. **Visit admin panel**: Add/edit/delete videos
+2. **Export data**: Download portfolio.json backup
+3. **Update portfolio.json**: Replace file with exported data
+4. **Push to GitHub**: Auto-deploys to Vercel
 
 ## Tech Stack
 
@@ -19,29 +60,6 @@ A modern, responsive portfolio website for Ihjas Ahammad, professional video edi
 - **GSAP**: Animation library
 - **JSON Data**: Local JSON for portfolio management (no database required)
 
-## Project Structure
-
-```
-ihjas-portfolio/
-├── index.html          # Homepage
-├── portfolio.html      # Portfolio page
-├── about.html          # About page
-├── contact.html        # Contact page
-├── categories.html     # Categories page
-├── resources.html      # Resources page
-├── css/
-│   └── styles.css      # Custom styles
-├── js/
-│   ├── main.js         # Main JavaScript functionality
-│   └── portfolio-loader.js  # Portfolio data management
-├── data/
-│   └── portfolio.json  # Portfolio data (videos, categories)
-├── images/
-│   └── thumbnails/      # Video thumbnails
-├── videos/             # Video files
-├── header.html         # Header component
-├── footer.html         # Footer component
-├── vercel.json         # Vercel configuration
 └── README.md           # This file
 ```
 
