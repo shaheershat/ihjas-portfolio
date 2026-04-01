@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sync Portfolio Data</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white min-h-screen flex items-center justify-center">
+    <div class="max-w-2xl w-full px-6">
+        <div class="bg-zinc-900 rounded-2xl p-8">
+            <h1 class="text-3xl font-bold mb-6 text-cyan-400">Sync Portfolio Data</h1>
+            
+            <div class="space-y-6">
+                <div>
+                    <h2 class="text-xl font-semibold mb-3">Step 1: Export from Admin</h2>
+                    <p class="text-zinc-400 mb-4">Go to the admin page and click "Export Data" to download your portfolio.json file.</p>
+                    <a href="admin.html" class="inline-block bg-cyan-600 hover:bg-cyan-700 text-black font-bold px-6 py-3 rounded-lg transition-colors">
+                        Open Admin Page
+                    </a>
+                </div>
+                
+                <div>
+                    <h2 class="text-xl font-semibold mb-3">Step 2: Replace portfolio.json</h2>
+                    <p class="text-zinc-400 mb-4">Replace the content of <code class="bg-zinc-800 px-2 py-1 rounded">data/portfolio.json</code> with your exported data.</p>
+                    <div class="bg-zinc-800 rounded-lg p-4">
+                        <p class="text-sm text-zinc-300">File location: <code class="text-cyan-400">/Users/apple/Desktop/Ihjas/data/portfolio.json</code></p>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-900/20 border border-yellow-600 rounded-lg p-4">
+                    <h3 class="text-yellow-400 font-semibold mb-2">⚠️ Important Note</h3>
+                    <p class="text-yellow-200 text-sm">
+                        This admin interface saves data to your browser's localStorage. 
+                        To make changes permanent, you must export the data and manually replace the portfolio.json file.
+                        In production, you can set up a backend to handle this automatically.
+                    </p>
+                </div>
+                
+                <div>
+                    <h2 class="text-xl font-semibold mb-3">Current Data Status</h2>
+                    <div id="data-status" class="bg-zinc-800 rounded-lg p-4">
+                        <p class="text-sm text-zinc-400">Checking current data...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check current data status
+        async function checkDataStatus() {
+            const statusDiv = document.getElementById('data-status');
+            
+            try {
+                // Check localStorage
+                const localData = localStorage.getItem('portfolioData');
+                const localCount = localData ? JSON.parse(localData).videos.length : 0;
+                
+                // Check actual file
+                const response = await fetch('data/portfolio.json');
+                const fileData = await response.json();
+                const fileCount = fileData.videos.length;
+                
+                statusDiv.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-zinc-400">Videos in localStorage:</span>
+                            <span class="text-cyan-400 font-semibold">${localCount}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-zinc-400">Videos in portfolio.json:</span>
+                            <span class="text-green-400 font-semibold">${fileCount}</span>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-zinc-700">
+                            <span class="text-sm ${localCount === fileCount ? 'text-green-400' : 'text-yellow-400'}">
+                                ${localCount === fileCount ? '✅ Data is in sync' : '⚠️ Data needs to be synced'}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                statusDiv.innerHTML = '<p class="text-red-400">Error checking data status</p>';
+            }
+        }
+        
+        checkDataStatus();
+    </script>
+</body>
+</html>

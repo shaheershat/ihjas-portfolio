@@ -2,39 +2,59 @@
   "videos": [
     {
       "id": 1,
-      "name": "Sample Project 1",
-      "description": "A dynamic video editing project showcasing advanced motion graphics and storytelling techniques.",
+      "name": "Brand Commercial - Tech Startup",
+      "description": "High-energy commercial for a tech startup featuring motion graphics and product showcases.",
       "category": "commercial",
-      "youtube_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "date": "2024-01-15",
-      "thumbnail": "images/thumbnails/project1.jpg"
+      "youtube_link": "https://youtu.be/ESc8IMmDiVs",
+      "date": "2024-01-15"
     },
     {
       "id": 2,
-      "name": "Social Media Campaign",
-      "description": "Engaging social media content series for brand awareness and audience growth.",
+      "name": "Instagram Reels Series",
+      "description": "Series of 15-second Instagram reels for fashion brand engagement campaign.",
       "category": "social",
-      "youtube_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "date": "2024-01-10",
-      "thumbnail": "images/thumbnails/project2.jpg"
+      "youtube_link": "https://youtu.be/ebi4SyeHz-A",
+      "date": "2024-01-10"
     },
     {
       "id": 3,
-      "name": "Music Video Edit",
-      "description": "Creative music video editing with synchronized cuts and visual effects.",
+      "name": "Indie Music Video - 'Summer Nights'",
+      "description": "Creative music video with synchronized edits and color grading for indie artist.",
       "category": "music",
-      "youtube_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "date": "2024-01-05",
-      "thumbnail": "images/thumbnails/project3.jpg"
+      "youtube_link": "https://youtu.be/3FuCOPcBmUE",
+      "date": "2024-01-05"
     },
     {
       "id": 4,
-      "name": "Documentary Short",
-      "description": "Compelling documentary short film with narrative storytelling and emotional impact.",
+      "name": "Documentary: Local Artists",
+      "description": "Short documentary featuring local artists and their creative processes.",
       "category": "documentary",
-      "youtube_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "date": "2023-12-28",
-      "thumbnail": "images/thumbnails/project4.jpg"
+      "youtube_link": "https://youtube.com/shorts/O9chvB3W0fc",
+      "date": "2023-12-28"
+    },
+    {
+      "id": 5,
+      "name": "Product Launch Video",
+      "description": "Exciting product launch video for new consumer electronics brand.",
+      "category": "commercial",
+      "youtube_link": "https://youtube.com/shorts/9H8eOQfzI3c",
+      "date": "2023-12-20"
+    },
+    {
+      "id": 6,
+      "name": "TikTok Viral Content",
+      "description": "Viral TikTok content series that gained 1M+ views for client.",
+      "category": "social",
+      "youtube_link": "https://youtube.com/shorts/11OF4bRjlYs",
+      "date": "2023-12-15"
+    },
+    {
+      "id": 7,
+      "name": "Fashion Brand Campaign",
+      "description": "Stylish fashion campaign video with cinematic shots and dynamic transitions.",
+      "category": "commercial",
+      "youtube_link": "https://youtube.com/shorts/cm8pVPAvakM",
+      "date": "2023-12-10"
     }
   ],
   "categories": [
@@ -42,13 +62,13 @@
       "id": "commercial",
       "name": "Commercial",
       "description": "Professional commercial video projects",
-      "count": 1
+      "count": 3
     },
     {
       "id": "social",
       "name": "Social Media",
       "description": "Engaging social media content",
-      "count": 1
+      "count": 3
     },
     {
       "id": "music",
