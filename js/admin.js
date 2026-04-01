@@ -5,7 +5,7 @@ const ADMIN_CREDENTIALS = {
 };
 
 // API Configuration
-const API_BASE_URL = 'https://your-site-name.netlify.app/.netlify/functions'; // Change to your Netlify URL
+const API_BASE_URL = '/.netlify/functions/videos'; // Use relative URL for Netlify functions
 
 let portfolioData = {
     videos: [],
@@ -50,7 +50,7 @@ async function loadDataFromAPI() {
         if (categoriesList) categoriesList.innerHTML = '<p class="text-zinc-400">Loading categories from database...</p>';
         
         // Fetch data from API
-        const response = await fetch(`${API_BASE_URL}/videos`);
+        const response = await fetch(`${API_BASE_URL}/get`);
         const data = await response.json();
         
         if (data.success) {
@@ -112,8 +112,8 @@ async function saveData() {
 async function addOrUpdateVideo(videoData) {
     try {
         const url = videoData.id ? 
-            `${API_BASE_URL}/videos/${videoData.id}` : 
-            `${API_BASE_URL}/videos`;
+            `${API_BASE_URL}/put/${videoData.id}` : 
+            `${API_BASE_URL}/post`;
             
         const method = videoData.id ? 'PUT' : 'POST';
         
@@ -144,7 +144,7 @@ async function deleteVideo(id) {
     if (!confirm('Are you sure you want to delete this video?')) return;
     
     try {
-        const response = await fetch(`${API_BASE_URL}/videos/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/delete/${id}`, {
             method: 'DELETE'
         });
         
@@ -264,8 +264,8 @@ document.getElementById('add-category-form').addEventListener('submit', function
 async function addOrUpdateCategory(categoryData) {
     try {
         const url = categoryData.id ? 
-            `${API_BASE_URL}/categories/${categoryData.id}` : 
-            `${API_BASE_URL}/categories`;
+            `${API_BASE_URL}/put-category/${categoryData.id}` : 
+            `${API_BASE_URL}/post-category`;
             
         const method = categoryData.id ? 'PUT' : 'POST';
         
@@ -296,7 +296,7 @@ async function deleteCategory(id) {
     if (!confirm('Are you sure you want to delete this category?')) return;
     
     try {
-        const response = await fetch(`${API_BASE_URL}/categories/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/delete-category/${id}`, {
             method: 'DELETE'
         });
         
