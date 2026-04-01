@@ -14,43 +14,39 @@ Professional video portfolio website with admin interface for managing content.
 - Responsive design for all devices
 - Video portfolio with filtering by category
 - Automatic YouTube thumbnail generation
-- Password-protected admin interface
-- Add/Edit/Delete videos without code editing
-- Export/Import functionality for backups
+##  **Project Structure**
+```
+ihjas-portfolio/
+├── index.html          # Main landing page
+├── portfolio.html       # Portfolio showcase with filters
+├── data/
+│   └── portfolio.json  # Video and category data
+├── css/
+│   └── styles.css      # Custom styling
+├── js/
+│   ├── main.js         # Main functionality
+│   └── portfolio-loader.js # Portfolio data loading
+├── images/             # Static images
+└── videos/             # Video files
+```
+
+## 🎯 **Features**
+- **Responsive Design**: Mobile and desktop optimized
+- **Category Filtering**: Filter by AI Generated, Personal Branding, Freelance, Social Media, B-Roll, Promo Videos
+- **Video Modal**: YouTube video playback
+- **Smooth Animations**: GSAP-powered transitions
+- **Modern UI**: Dark theme with neon accents
+
+## 📱 **Mobile Features**
+- **Horizontal Filters**: Scrollable category buttons on mobile
+- **Touch Optimized**: Mobile-friendly interactions
+- **Responsive Grid**: Adaptive layout for all screen sizes
 
 ## 🚀 **Deployment**
 - **Platform**: Vercel
 - **Repository**: https://github.com/shaheershat/ihjas-portfolio
 - **Branch**: main
 - **Framework**: Static HTML/CSS/JavaScript
-
-## 📁 **Project Structure**
-```
-ihjas-portfolio/
-├── index.html          # Main homepage
-├── portfolio.html       # Portfolio grid page
-├── admin.html          # Admin interface (password protected)
-├── sync-data.html      # Data sync utility
-├── data/
-│   └── portfolio.json  # Video and category data
-├── js/
-│   ├── main.js
-│   ├── portfolio-loader.js
-│   └── admin.js
-├── css/
-│   └── style.css
-└── images/
-    └── thumbnails/      # Video thumbnails
-    └── videos/             # Video files
-    └── header.html         # Header component
-    └── footer.html         # Footer component
-```
-
-## 🎯 **Usage**
-1. **Visit admin panel**: Add/edit/delete videos
-2. **Export data**: Download portfolio.json backup
-3. **Update portfolio.json**: Replace file with exported data
-4. **Push to GitHub**: Auto-deploys to Vercel
 
 ## Tech Stack
 
@@ -59,9 +55,6 @@ ihjas-portfolio/
 - **JavaScript ES6+**: Modern JavaScript features
 - **GSAP**: Animation library
 - **JSON Data**: Local JSON for portfolio management (no database required)
-
-└── README.md           # This file
-```
 
 ## Getting Started
 

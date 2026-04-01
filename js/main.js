@@ -720,27 +720,36 @@ window.initLocalVideos = function() {
         }
     }
 
-    // Admin form handling (visible when ?admin=1)
-    const adminForm = document.getElementById('video-admin');
-    if (adminForm) {
-        adminForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const fd = new FormData(adminForm);
-            const name = fd.get('name');
-            const description = fd.get('description');
-            const category = fd.get('category');
-            const youtube = fd.get('youtube');
-            const date = fd.get('date') || new Date().toISOString();
-
-            // Use YouTube thumbnail when no cover is supplied — keeps admin flow simple.
-            const ytId = extractYouTubeID(youtube);
+    // Export/import buttons
+    const exportBtn = document.getElementById('export-videos');
+    const importInput = document.getElementById('import-videos');
+    if (exportBtn) exportBtn.addEventListener('click', () => {
+        const data = loadItems();
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = 'videos.json'; a.click(); URL.revokeObjectURL(url);
+    });
+    if (importInput) importInput.addEventListener('change', (ev) => {
+        const f = ev.target.files[0];
+        if (!f) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            try {
+                const imported = JSON.parse(reader.result);
+                if (Array.isArray(imported)) {
+                    saveItems(imported.concat(loadItems()));
+                    render();
+                }
+            } catch (e) { alert('Invalid JSON'); }
+        };
+        reader.readAsText(f);
+    });
             const defaultThumb = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null;
 
             const items = loadItems();
             items.unshift({ id: Date.now(), name, description, category, youtube_id: ytId, cover_url: defaultThumb, created_at: date });
             saveItems(items);
             render();
-            adminForm.reset();
         });
 
         // Export/import buttons
