@@ -1,0 +1,9 @@
+{
+  "name": "portfolio-functions",
+  "version": "1.0.0",
+  "description": "Netlify functions for PostgreSQL video portfolio",
+  "main": "get.js",
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}

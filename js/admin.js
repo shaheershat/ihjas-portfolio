@@ -1,8 +1,11 @@
-// Portfolio Admin - Authentication and Video Management
+// Portfolio Admin - PostgreSQL Database Integration
 const ADMIN_CREDENTIALS = {
-    username: 'ihjas',
-    password: 'ahammad123' // Change this to your preferred password
+    username: 'admin',
+    password: 'admin' // Updated to match PostgreSQL user
 };
+
+// API Configuration
+const API_BASE_URL = 'https://your-site-name.netlify.app/.netlify/functions'; // Change to your Netlify URL
 
 let portfolioData = {
     videos: [],
@@ -34,7 +37,179 @@ function showLoginScreen() {
 function showAdminInterface() {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('admin-interface').classList.remove('hidden');
-    loadData();
+    loadDataFromAPI();
+}
+
+// Load data from PostgreSQL API
+async function loadDataFromAPI() {
+    try {
+        // Show loading state
+        const videosList = document.getElementById('videos-list');
+        const categoriesList = document.getElementById('categories-list');
+        if (videosList) videosList.innerHTML = '<p class="text-zinc-400">Loading videos from database...</p>';
+        if (categoriesList) categoriesList.innerHTML = '<p class="text-zinc-400">Loading categories from database...</p>';
+        
+        // Fetch data from API
+        const response = await fetch(`${API_BASE_URL}/videos`);
+        const data = await response.json();
+        
+        if (data.success) {
+            portfolioData.videos = data.videos;
+            portfolioData.categories = data.categories;
+            displayVideos();
+            displayCategories();
+        } else {
+            console.error('Error loading data:', data.error);
+            showNotification('Error loading data from database', 'error');
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+        showNotification('Network error. Please check your connection.', 'error');
+    }
+}
+
+// Save data to PostgreSQL API
+async function saveData() {
+    try {
+        // Get current videos from API first
+        const getResponse = await fetch(`${API_BASE_URL}/videos`);
+        const getData = await getResponse.json();
+        
+        if (!getData.success) {
+            showNotification('Error loading current data', 'error');
+            return;
+        }
+        
+        // Update each video in the database
+        for (const video of portfolioData.videos) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/videos/${video.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(video)
+                });
+                
+                const result = await response.json();
+                if (!result.success) {
+                    console.error('Error updating video:', result.error);
+                }
+            } catch (error) {
+                console.error('Error updating video:', error);
+            }
+        }
+        
+        showNotification('All changes saved to PostgreSQL database!', 'success');
+        
+    } catch (error) {
+        console.error('Save error:', error);
+        showNotification('Error saving data to database', 'error');
+    }
+}
+
+// Add or update video
+async function addOrUpdateVideo(videoData) {
+    try {
+        const url = videoData.id ? 
+            `${API_BASE_URL}/videos/${videoData.id}` : 
+            `${API_BASE_URL}/videos`;
+            
+        const method = videoData.id ? 'PUT' : 'POST';
+        
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(videoData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification(videoData.id ? 'Video updated successfully!' : 'Video added successfully!', 'success');
+            await loadDataFromAPI(); // Reload data
+        } else {
+            showNotification(`Error: ${result.error}`, 'error');
+        }
+    } catch (error) {
+        console.error('API error:', error);
+        showNotification('Network error. Please try again.', 'error');
+    }
+}
+
+// Delete video
+async function deleteVideo(id) {
+    if (!confirm('Are you sure you want to delete this video?')) return;
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/videos/${id}`, {
+            method: 'DELETE'
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification('Video deleted successfully!', 'success');
+            await loadDataFromAPI(); // Reload data
+        } else {
+            showNotification(`Error: ${result.error}`, 'error');
+        }
+    } catch (error) {
+        console.error('API error:', error);
+        showNotification('Network error. Please try again.', 'error');
+    }
+}
+
+// Display current categories
+function displayCategories() {
+    const categoriesList = document.getElementById('categories-list');
+    
+    if (portfolioData.categories.length === 0) {
+        categoriesList.innerHTML = '<p class="text-zinc-400">No categories added yet.</p>';
+        return;
+    }
+    
+    categoriesList.innerHTML = portfolioData.categories.map(category => `
+        <div class="bg-zinc-800 rounded-lg p-4 flex items-center justify-between">
+            <div class="flex-1">
+                <h3 class="font-bold text-lg mb-1">${category.name}</h3>
+                <p class="text-zinc-400 text-sm mb-2">${category.description}</p>
+                <div class="flex gap-4 text-sm">
+                    <span class="text-cyan-400">${category.count || 0} videos</span>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="editCategory(${category.id})" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition-colors">
+                    Edit
+                </button>
+                <button onclick="deleteCategory(${category.id})" 
+                        class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm transition-colors">
+                    Delete
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Edit video
+function editVideo(id) {
+    const video = portfolioData.videos.find(v => v.id === id);
+    if (!video) return;
+    
+    document.getElementById('video-name').value = video.name;
+    document.getElementById('video-description').value = video.description;
+    document.getElementById('video-url').value = video.youtube_link;
+    document.getElementById('video-category').value = video.category;
+    document.getElementById('video-date').value = video.date;
+    
+    // Change button text
+    document.querySelector('#add-video-form button[type="submit"]').textContent = 'Update Video';
+    
+    // Scroll to form
+    document.getElementById('add-video-form').scrollIntoView({ behavior: 'smooth' });
 }
 
 // Handle login
@@ -56,104 +231,7 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
     }
 });
 
-// Logout function
-function logout() {
-    sessionStorage.removeItem('adminLoggedIn');
-    showLoginScreen();
-    showNotification('Logged out successfully!', 'info');
-}
-
-// Load existing data
-async function loadData() {
-    try {
-        const response = await fetch('data/portfolio.json');
-        const data = await response.json();
-        portfolioData = data;
-        updateCategoryCounts();
-        displayVideos();
-    } catch (error) {
-        console.error('Error loading data:', error);
-        displayVideos();
-    }
-}
-
-// Save data to localStorage AND try to save to actual file
-function saveData() {
-    updateCategoryCounts();
-    
-    // For local development, save to localStorage
-    localStorage.setItem('portfolioData', JSON.stringify(portfolioData, null, 2));
-    
-    // Also try to save to actual portfolio.json file
-    const dataStr = JSON.stringify(portfolioData, null, 2);
-    
-    // Create a downloadable file for the user
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'portfolio.json';
-    link.click();
-    
-    URL.revokeObjectURL(url);
-    
-    // Show success message with instructions
-    showNotification('Data saved! Download portfolio.json and replace the file in your data folder to make changes visible on your site.', 'success');
-}
-
-// Update category counts based on videos
-function updateCategoryCounts() {
-    // Reset counts
-    portfolioData.categories.forEach(cat => cat.count = 0);
-    
-    // Count videos per category
-    portfolioData.videos.forEach(video => {
-        const category = portfolioData.categories.find(cat => cat.id === video.category);
-        if (category) {
-            category.count++;
-        }
-    });
-}
-
-// Display current videos
-function displayVideos() {
-    const videosList = document.getElementById('videos-list');
-    
-    if (portfolioData.videos.length === 0) {
-        videosList.innerHTML = '<p class="text-zinc-400">No videos added yet.</p>';
-        return;
-    }
-    
-    // Sort videos by date (newest first)
-    const sortedVideos = [...portfolioData.videos].sort((a, b) => new Date(b.date) - new Date(a.date));
-    
-    videosList.innerHTML = sortedVideos.map(video => `
-        <div class="bg-zinc-800 rounded-lg p-4 flex items-center justify-between">
-            <div class="flex-1">
-                <h3 class="font-bold text-lg mb-1">${video.name}</h3>
-                <p class="text-zinc-400 text-sm mb-2">${video.description}</p>
-                <div class="flex gap-4 text-sm">
-                    <span class="text-cyan-400">${video.category}</span>
-                    <span class="text-zinc-500">${new Date(video.date).toLocaleDateString()}</span>
-                    <a href="${video.youtube_link}" target="_blank" class="text-blue-400 hover:underline">View Video</a>
-                </div>
-            </div>
-            <div class="flex gap-2">
-                <button onclick="editVideo(${video.id})" 
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition-colors">
-                    Edit
-                </button>
-                <button onclick="deleteVideo(${video.id})" 
-                        class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm transition-colors">
-                    Delete
-                </button>
-            </div>
-        </div>
-    `).join('');
-}
-
-// Add or update video
+// Handle form submission
 document.getElementById('add-video-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -166,49 +244,90 @@ document.getElementById('add-video-form').addEventListener('submit', function(e)
         date: document.getElementById('video-date').value
     };
     
-    // Check if editing existing video
-    const existingIndex = portfolioData.videos.findIndex(v => v.id == videoData.id);
-    
-    if (existingIndex !== -1) {
-        portfolioData.videos[existingIndex] = videoData;
-        showNotification('Video updated successfully!', 'success');
-    } else {
-        portfolioData.videos.push(videoData);
-        showNotification('Video added successfully!', 'success');
-    }
-    
-    saveData();
-    displayVideos();
-    resetForm();
+    addOrUpdateVideo(videoData);
 });
 
-// Edit video
-function editVideo(id) {
-    const video = portfolioData.videos.find(v => v.id === id);
-    if (!video) return;
+// Add new category
+document.getElementById('add-category-form').addEventListener('submit', function(e) {
+    e.preventDefault();
     
-    document.getElementById('video-id').value = video.id;
-    document.getElementById('video-name').value = video.name;
-    document.getElementById('video-description').value = video.description;
-    document.getElementById('video-url').value = video.youtube_link;
-    document.getElementById('video-category').value = video.category;
-    document.getElementById('video-date').value = video.date;
+    const categoryData = {
+        id: document.getElementById('category-id')?.value || Date.now(),
+        name: document.getElementById('category-name').value,
+        description: document.getElementById('category-description').value
+    };
     
-    // Change button text
-    document.querySelector('#add-video-form button[type="submit"]').textContent = 'Update Video';
-    
-    // Scroll to form
-    document.getElementById('add-video-form').scrollIntoView({ behavior: 'smooth' });
+    addOrUpdateCategory(categoryData);
+});
+
+// Add or update category
+async function addOrUpdateCategory(categoryData) {
+    try {
+        const url = categoryData.id ? 
+            `${API_BASE_URL}/categories/${categoryData.id}` : 
+            `${API_BASE_URL}/categories`;
+            
+        const method = categoryData.id ? 'PUT' : 'POST';
+        
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(categoryData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification(categoryData.id ? 'Category updated successfully!' : 'Category added successfully!', 'success');
+            await loadDataFromAPI(); // Reload data
+        } else {
+            showNotification(`Error: ${result.error}`, 'error');
+        }
+    } catch (error) {
+        console.error('API error:', error);
+        showNotification('Network error. Please try again.', 'error');
+    }
 }
 
-// Delete video
-function deleteVideo(id) {
-    if (!confirm('Are you sure you want to delete this video?')) return;
+// Delete category
+async function deleteCategory(id) {
+    if (!confirm('Are you sure you want to delete this category?')) return;
     
-    portfolioData.videos = portfolioData.videos.filter(v => v.id !== id);
-    saveData();
-    displayVideos();
-    showNotification('Video deleted successfully!', 'success');
+    try {
+        const response = await fetch(`${API_BASE_URL}/categories/${id}`, {
+            method: 'DELETE'
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification('Category deleted successfully!', 'success');
+            await loadDataFromAPI(); // Reload data
+        } else {
+            showNotification(`Error: ${result.error}`, 'error');
+        }
+    } catch (error) {
+        console.error('API error:', error);
+        showNotification('Network error. Please try again.', 'error');
+    }
+}
+
+// Edit category
+function editCategory(id) {
+    const category = portfolioData.categories.find(c => c.id === id);
+    if (!category) return;
+    
+    document.getElementById('category-id').value = category.id;
+    document.getElementById('category-name').value = category.name;
+    document.getElementById('category-description').value = category.description;
+    
+    // Change button text
+    document.querySelector('#add-category-form button[type="submit"]').textContent = 'Update Category';
+    
+    // Scroll to form
+    document.getElementById('add-category-form').scrollIntoView({ behavior: 'smooth' });
 }
 
 // Reset form
@@ -216,19 +335,18 @@ function resetForm() {
     document.getElementById('add-video-form').reset();
     document.getElementById('video-id')?.remove();
     document.querySelector('#add-video-form button[type="submit"]').textContent = 'Add Video';
+    document.getElementById('add-category-form').reset();
+    document.getElementById('category-id')?.remove();
+    document.querySelector('#add-category-form button[type="submit"]').textContent = 'Add Category';
 }
 
-// Export data
-function exportData() {
-    updateCategoryCounts();
-    const dataStr = JSON.stringify(portfolioData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'portfolio.json';
-    link.click();
+// Add hidden ID field to form
+const form = document.getElementById('add-video-form');
+if (!document.getElementById('video-id')) {
+    const idField = document.createElement('input');
+    idField.type = 'hidden';
+    idField.id = 'video-id';
+    form.appendChild(idField);
     
     URL.revokeObjectURL(url);
     showNotification('Data exported successfully!', 'success');
@@ -285,12 +403,12 @@ function showNotification(message, type = 'info') {
 }
 
 // Add hidden ID field to form
-const form = document.getElementById('add-video-form');
+const adminForm = document.getElementById('add-video-form');
 if (!document.getElementById('video-id')) {
     const idField = document.createElement('input');
     idField.type = 'hidden';
     idField.id = 'video-id';
-    form.appendChild(idField);
+    adminForm.appendChild(idField);
 }
 
 // Check authentication on page load
