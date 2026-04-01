@@ -53,7 +53,7 @@
       "id": 7,
       "name": "College Programme Energy",
       "description": "This video highlights the energy and excitement of a college programme through dynamic event coverage and editing.",
-      "category": "freelance, social media",
+      "category": "social media",
       "youtube_link": "https://youtube.com/shorts/iRwplI1Ums0",
       "date": "2026-02-04"
     },
@@ -61,7 +61,7 @@
       "id": 8,
       "name": "College Programme Performances",
       "description": "College programme video featuring performances, crowd moments, and event highlights.",
-      "category": "freelance, social media",
+      "category": "social media",
       "youtube_link": "https://youtube.com/shorts/0zPWQLPgFkc",
       "date": "2026-02-04"
     },
@@ -69,7 +69,7 @@
       "id": 9,
       "name": "School Programme Promotion",
       "description": "A promotional video created for a school programme, highlighting key activities and building excitement for the event.",
-      "category": "freelance, social media, promo videos",
+      "category": "freelance",
       "youtube_link": "https://youtube.com/shorts/bDdCmkoLrEU",
       "date": "2026-02-04"
     },
@@ -132,6 +132,18 @@
       "name": "Freelance & Social Media",
       "description": "Freelance projects and social media content creation",
       "count": 3
+    },
+    {
+      "id": "social media",
+      "name": "Social Media",
+      "description": "Social media content creation and management",
+      "count": 0
+    },
+    {
+      "id": "freelance",
+      "name": "Freelance",
+      "description": "Freelance video projects and client work",
+      "count": 0
     },
     {
       "id": "b roll",

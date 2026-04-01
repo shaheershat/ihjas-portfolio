@@ -12,6 +12,31 @@ body {
     overflow-x: hidden;
 }
 
+/* Mobile horizontal scrolling for filters */
+@media (max-width: 768px) {
+    .filter-bar {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-height: thin;
+    }
+    
+    .filter-bar::-webkit-scrollbar {
+        height: 4px;
+        width: 4px;
+        background: #374151;
+    }
+    
+    .filter-bar::-webkit-scrollbar-track {
+        background: #1f2937;
+    }
+    
+    .filter-bar::-webkit-scrollbar-thumb {
+        background: #6b7280;
+        border-radius: 2px;
+    }
+}
+
 .logo-font {
     font-family: 'Caveat', cursive;
 }
