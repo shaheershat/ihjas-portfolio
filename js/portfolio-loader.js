@@ -363,6 +363,7 @@ window.openVideoModal = function(youtubeUrl) {
 
         modal.querySelector('.bg-zinc-900').innerHTML = `
             <iframe 
+                id="video-iframe"
                 src="${embedUrl}" 
                 class="w-full h-full rounded-3xl" 
                 frameborder="0" 
@@ -374,21 +375,6 @@ window.openVideoModal = function(youtubeUrl) {
 
     modal.classList.remove('opacity-0', 'pointer-events-none');
     modal.classList.add('opacity-100');
-    
-    // Add event listener to stop video when modal is closed
-    modal.addEventListener('click', function(e) {
-        // Only close if clicking outside the iframe or on close button
-        if (e.target === modal || e.target.classList.contains('close-modal')) {
-            closeVideoModal();
-        }
-    });
-    
-    // Add keyboard listener to close on Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeVideoModal();
-        }
-    });
 };
 
 // Function to close video modal and stop playback
@@ -396,21 +382,49 @@ window.closeVideoModal = function() {
     const modal = document.getElementById('video-modal');
     if (!modal) return;
     
-    // Find the iframe and remove it to stop video
-    const iframe = modal.querySelector('iframe');
+    console.log('Closing video modal');
+    
+    // Find and remove the iframe to stop video
+    const iframe = modal.querySelector('#video-iframe');
     if (iframe) {
         // Set src to empty to stop video
         iframe.src = '';
         // Remove the iframe completely
         iframe.remove();
+        console.log('Video iframe removed');
     }
     
     // Hide modal
     modal.classList.add('opacity-0', 'pointer-events-none');
     modal.classList.remove('opacity-100');
     
-    console.log('Video modal closed and playback stopped');
+    console.log('Video modal closed and hidden');
 };
+
+// Close modal when clicking close button
+document.addEventListener('click', function(e) {
+    if (e.target.closest('#close-modal')) {
+        closeVideoModal();
+    }
+});
+
+// Close modal when clicking outside the video area
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('video-modal');
+    if (modal && modal.classList.contains('opacity-100')) {
+        // Check if click is outside the modal content
+        if (!e.target.closest('.bg-zinc-900')) {
+            closeVideoModal();
+        }
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeVideoModal();
+    }
+});
 
 // Close modal functionality
 document.addEventListener('click', (e) => {
