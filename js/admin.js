@@ -51,35 +51,26 @@ async function loadData() {
     }
 }
 
-// Save data directly to JSON file (visible to all users)
-async function saveData() {
+// Save data to localStorage and provide download (Netlify can't write files directly)
+function saveData() {
     updateCategoryCounts();
     
-    try {
-        // Save directly to the JSON file that the portfolio reads from
-        const response = await fetch('/api/save-data', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(portfolioData, null, 2)
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            showNotification('Data saved! Changes are now visible to all visitors on your website.', 'success');
-            // Reload the data to show updated list
-            await loadData();
-        } else {
-            showNotification(`Error: ${result.error}`, 'error');
-        }
-    } catch (error) {
-        console.error('Error saving to file:', error);
-        // Fallback to localStorage
-        localStorage.setItem('portfolioData', JSON.stringify(portfolioData, null, 2));
-        showNotification('Data saved locally! Download portfolio.json and replace file in your data folder to make changes visible on your site.', 'success');
-    }
+    // Save to localStorage
+    localStorage.setItem('portfolioData', JSON.stringify(portfolioData, null, 2));
+    
+    // Create downloadable file
+    const dataStr = JSON.stringify(portfolioData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'portfolio.json';
+    link.click();
+    
+    URL.revokeObjectURL(url);
+    
+    showNotification('✅ Success!\n\nVideo added successfully!\n\nNext Steps:\n\n1. Download the portfolio.json file\n2. Replace the file in: data/portfolio.json\n3. Push to GitHub to update your live site', 'success');
 }
 
 // Add or update video
