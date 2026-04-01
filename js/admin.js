@@ -51,80 +51,77 @@ async function loadData() {
     }
 }
 
-// Save data to localStorage and provide download
-function saveData() {
+// Save data directly to JSON file (visible to all users)
+async function saveData() {
     updateCategoryCounts();
     
-    // Save to localStorage
-    localStorage.setItem('portfolioData', JSON.stringify(portfolioData, null, 2));
-    
-    // Create downloadable file
-    const dataStr = JSON.stringify(portfolioData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'portfolio.json';
-    link.click();
-    
-    URL.revokeObjectURL(url);
-    
-    showNotification('Data saved! Download portfolio.json and replace the file in your data folder to make changes visible on your site.', 'success');
-}
-
-// Add or update video
-async function addOrUpdateVideo(videoData) {
     try {
-        const url = videoData.id ? 
-            `${API_BASE_URL}/put/${videoData.id}` : 
-            `${API_BASE_URL}/post`;
-            
-        const method = videoData.id ? 'PUT' : 'POST';
-        
-        const response = await fetch(url, {
-            method: method,
+        // Save directly to the JSON file that the portfolio reads from
+        const response = await fetch('/api/save-data', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(videoData)
+            body: JSON.stringify(portfolioData, null, 2)
         });
         
         const result = await response.json();
         
         if (result.success) {
-            showNotification(videoData.id ? 'Video updated successfully!' : 'Video added successfully!', 'success');
-            await loadDataFromAPI(); // Reload data
+            showNotification('Data saved! Changes are now visible to all visitors on your website.', 'success');
+            // Reload the data to show updated list
+            await loadData();
         } else {
             showNotification(`Error: ${result.error}`, 'error');
         }
     } catch (error) {
-        console.error('API error:', error);
-        showNotification('Network error. Please try again.', 'error');
+        console.error('Error saving to file:', error);
+        // Fallback to localStorage
+        localStorage.setItem('portfolioData', JSON.stringify(portfolioData, null, 2));
+        showNotification('Data saved locally! Download portfolio.json and replace file in your data folder to make changes visible on your site.', 'success');
     }
 }
 
+// Add or update video
+document.getElementById('add-video-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const videoData = {
+        id: document.getElementById('video-id')?.value || Date.now(),
+        name: document.getElementById('video-name').value,
+        description: document.getElementById('video-description').value,
+        youtube_link: document.getElementById('video-url').value,
+        category: document.getElementById('video-category').value,
+        date: document.getElementById('video-date').value
+    };
+    
+    // Check if editing existing video
+    const existingIndex = portfolioData.videos.findIndex(v => v.id == videoData.id);
+    
+    if (existingIndex !== -1) {
+        portfolioData.videos[existingIndex] = videoData;
+        showNotification('Video updated successfully!', 'success');
+    } else {
+        portfolioData.videos.push(videoData);
+        showNotification('Video added successfully!', 'success');
+    }
+    
+    // Save directly to JSON file (visible to all users)
+    saveData();
+    displayVideos();
+    resetForm();
+});
+
 // Delete video
-async function deleteVideo(id) {
+function deleteVideo(id) {
     if (!confirm('Are you sure you want to delete this video?')) return;
     
-    try {
-        const response = await fetch(`${API_BASE_URL}/delete/${id}`, {
-            method: 'DELETE'
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            showNotification('Video deleted successfully!', 'success');
-            await loadDataFromAPI(); // Reload data
-        } else {
-            showNotification(`Error: ${result.error}`, 'error');
-        }
-    } catch (error) {
-        console.error('API error:', error);
-        showNotification('Network error. Please try again.', 'error');
-    }
+    portfolioData.videos = portfolioData.videos.filter(v => v.id !== id);
+    
+    // Save directly to JSON file (visible to all users)
+    saveData();
+    displayVideos();
+    showNotification('Video deleted successfully!', 'success');
 }
 
 // Display current categories
